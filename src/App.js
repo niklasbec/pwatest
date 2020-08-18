@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import {fetchWeather} from "./api/fetchWeather"
+import "./App.css"
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const [query, setQuery] = useState("")
+    const [weather, setWeather] = useState({})
+    const search = async (e) => {
+        if(e.key === "Enter") {
+            const data = await fetchWeather()
+            setWeather(data)
+            setQuery("")
+            console.log(weather);
+        }
+    }  
+
+    return (
+        <div className="main-container">
+            <input 
+                type="text"
+                className="search"
+                placeholder="Search..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyPress={search}
+            />
+            {weather.info ? <div><h2>{weather.info.count}</h2></div> : null}
+        </div>
+    )
 }
 
 export default App;
